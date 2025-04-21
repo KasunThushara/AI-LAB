@@ -69,12 +69,12 @@ def generate_frames():
 def run_detection(model_path, input_source, label_path):
     global current_process
     home_dir = os.path.expanduser("~")
-    app_dir = os.path.join(home_dir, "Hailo-Web-App")
+    app_dir = os.path.join(home_dir, "Hailo-AI-Lab")
 
     if not os.path.exists(app_dir):
         raise FileNotFoundError(f"Directory not found: {app_dir}")
 
-    base_cmd = f"cd {app_dir} && source env/bin/activate && cd Hailo-Web && "
+    base_cmd = f"cd {app_dir} && source env/bin/activate && cd AI-LAB && "
     
     if input_source.lower() == 'camera':
         detection_cmd = f"python3 client_object_detection.py -n {model_path} -i camera -l {label_path}"
@@ -93,12 +93,12 @@ def run_detection(model_path, input_source, label_path):
 def run_pose_estimation(model_path, input_source):
     global current_process
     home_dir = os.path.expanduser("~")
-    app_dir = os.path.join(home_dir, "Hailo-Web-App")
+    app_dir = os.path.join(home_dir, "Hailo-AI-Lab")
 
     if not os.path.exists(app_dir):
         raise FileNotFoundError(f"Directory not found: {app_dir}")
 
-    base_cmd = f"cd {app_dir} && source env/bin/activate && cd Hailo-Web && "
+    base_cmd = f"cd {app_dir} && source env/bin/activate && cd AI-LAB && "
 
     if input_source.lower() == 'camera':
         detection_cmd = f"python3 client_pose_estimation.py -n {model_path} -i 0"
