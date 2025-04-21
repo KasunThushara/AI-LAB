@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block content %}
+<!-- Welcome Section -->
+<div class="container mt-5">
+    <h1 class="mb-4 text-success">Welcome to Seeed Studio AI Lab</h1>
+
+    <div class="mb-4">
+        <h4 class="text-primary">🚀 Raspberry Pi AI, One Click Away</h4>
+        <p>
+            This platform lets you experience the power of <strong>AI on the Edge</strong> with zero hassle.
+            Whether you're a developer, student, or hobbyist, the Seeed Studio AI Lab simplifies your AI journey.
+        </p>
+        <p>
+            With our AI Lab, you can build and run your Python-based AI models using a user-friendly interface, and test your <code>.hef</code> models across a variety of vision tasks such as:
+        </p>
+        <ul>
+            <li>📦 Object Detection</li>
+            <li>😃 Face Detection</li>
+            <li>🧍 Pose Estimation</li>
+            <li>🔍 Instance Segmentation</li>
+            <li>🧠 Large Language Models (Coming Soon!)</li>
+        </ul>
+        <p class="fw-bold text-secondary">Just plug in and start exploring AI — no complex setup required.</p>
+    </div>
+
+    <!-- Product: reComputer AI R2000 -->
+    <a href="https://www.seeedstudio.com/reComputer-AI-R2130-12-p-6368.html" target="_blank" class="text-decoration-none text-reset">
+        <div class="card mb-5 shadow">
+            <div class="row g-0">
+                <div class="col-md-4">
+                    <img src="{{ url_for('static', filename='images/aibox.jpg') }}" class="img-fluid rounded-start" alt="reComputer AI R2000">
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <h5 class="card-title text-success">🔌 reComputer AI R2000</h5>
+                        <p class="card-text">
+                            A powerful Edge AI Computer built on the Raspberry Pi 5, the <strong>reComputer AI R2000</strong> features a quad-core Arm Cortex-A76 processor, 8GB RAM, M.2 SSD support, and an integrated Hailo-8 AI accelerator that delivers up to <strong>26 TOPS</strong>.
+                        </p>
+                        <p class="card-text">Ideal for real-time, low-latency, high-efficiency AI applications like:</p>
+                        <ul>
+                            <li>📹 AI-powered Video Analytics</li>
+                            <li>🧠 Machine Vision</li>
+                            <li>🌐 Intelligent Edge Computing</li>
+                        </ul>
+                        <p class="card-text"><small class="text-muted">Designed for industrial and commercial use.</small></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </a>
+
+    <a href="https://www.seeedstudio.com/Raspberry-Pi-Al-HAT-26-TOPS-p-6243.html" target="_blank" class="text-decoration-none text-reset">
+        <div class="card shadow">
+            <div class="row g-0">
+                <div class="col-md-4">
+                    <img src="{{ url_for('static', filename='images/ai_hat.jpg') }}" class="img-fluid rounded-start" alt="Raspberry Pi AI HAT+">
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <h5 class="card-title text-success">🧢 Raspberry Pi AI HAT+</h5>
+                        <p class="card-text">
+                            The <strong>Raspberry Pi AI HAT+</strong> is a plug-and-play add-on board with an embedded <strong>Hailo AI accelerator</strong>. It brings high-performance AI capabilities directly to your Raspberry Pi 5 in a compact, power-efficient form.
+                        </p>
+                        <p class="card-text">Perfect for:</p>
+                        <ul>
+                            <li>🏠 Home Automation</li>
+                            <li>🤖 Robotics</li>
+                            <li>🔒 Smart Security</li>
+                            <li>⚙️ Process Control</li>
+                        </ul>
+                        <p class="card-text"><small class="text-muted">Affordable AI for everyone, from makers to professionals.</small></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </a>
+</div> <!-- This is the missing closing div for the container -->
+
+{% endblock %}

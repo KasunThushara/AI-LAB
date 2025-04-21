@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container mt-5">
+    <h2 class="text-success mb-4">🎯 Object Detection with NPU</h2>
+
+    <p class="lead">
+        Experience real-time object detection using our Edge AI hardware powered by the <strong>Hailo AI accelerator</strong>.
+        We support popular vision models including:
+    </p>
+    <ul>
+        <li>🧠 YOLOv5, YOLOv6, YOLOv7, YOLOv8, YOLOv9, YOLOv10</li>
+        <li>⚡ YOLOX, SSD, CenterNet</li>
+        <li>📦 Hailo HEF Models (.hef)</li>
+    </ul>
+
+    <p class="text-secondary fw-bold">
+        Upload your <code>.hef</code> model, label file (<code>.txt</code>), and choose input from a live camera or an uploaded MP4 video.
+        Just click and experience blazing-fast object detection on the edge!
+    </p>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+            <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+    {% endwith %}
+
+    <form method="POST" enctype="multipart/form-data">
+        <div class="mb-3">
+            <label for="model" class="form-label">HEF Model File (.hef)</label>
+            <input class="form-control" type="file" name="model" id="model" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="label" class="form-label">Label File (.txt)</label>
+            <input class="form-control" type="file" name="label" id="label" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="input_type" class="form-label">Input Source</label>
+            <select class="form-select" name="input_type" id="input_type" required onchange="toggleMp4Upload()">
+                <option value="">-- Select --</option>
+                <option value="camera">Live Camera</option>
+                <option value="mp4">MP4 File</option>
+            </select>
+        </div>
+
+        <div class="mb-3" id="mp4_upload" style="display: none;">
+            <label for="mp4_file" class="form-label">Upload MP4 File</label>
+            <input class="form-control" type="file" name="mp4_file" id="mp4_file">
+        </div>
+
+        <button type="submit" class="btn btn-primary">🚀 Start Detection</button>
+    </form>
+</div>
+
+<script>
+function toggleMp4Upload() {
+    const inputType = document.getElementById('input_type').value;
+    const mp4Section = document.getElementById('mp4_upload');
+    mp4Section.style.display = inputType === 'mp4' ? 'block' : 'none';
+}
+</script>
+
+{% endblock %}
