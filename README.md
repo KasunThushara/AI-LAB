@@ -6,7 +6,7 @@ A lightweight web application for running AI inference on Raspberry Pi using the
 ## 🧰 Prerequisites
 
 - Raspberry Pi with Hailo driver and `hailo-all` installed
-- Python 3.7+
+- Python 3.10
 - Git
 - Internet connection to download resources
 
