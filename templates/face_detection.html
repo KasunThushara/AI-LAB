@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container mt-5">
+    <h2 class="text-primary mb-4">Face Landmark Detection</h2>
+    
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <div class="card shadow">
+                <div class="card-body">
+                    <div class="mb-4">
+                        <h4 class="text-primary">About Face Landmark Detection</h4>
+                        <p>
+                            This system uses MediaPipe with Hailo NPU acceleration to detect facial landmarks in real-time.
+                            MediaPipe is an open-source framework from Google for building multimodal machine learning pipelines.
+                        </p>
+                        <p>
+                            <strong>Key Features:</strong>
+                            <ul>
+                                <li>Detects 468 facial landmarks with high precision</li>
+                                <li>Runs efficiently on Hailo-8 NPU hardware</li>
+                                <li>Real-time performance even on edge devices</li>
+                                <li>Enables applications like AR filters, facial analysis, and more</li>
+                            </ul>
+                        </p>
+                    </div>
+                    
+                    <form method="POST" action="{{ url_for('start_face_detection') }}">
+                        <input type="hidden" name="input_type" value="camera">
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="bi bi-camera-video-fill"></i> Start Face Detection
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

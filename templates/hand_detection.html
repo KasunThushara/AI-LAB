@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container mt-5">
+    <h2 class="text-info mb-4">Hand Landmark Detection</h2>
+    
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <div class="card shadow">
+                <div class="card-body">
+                    <div class="mb-4">
+                        <h4 class="text-info">About Hand Landmark Detection</h4>
+                        <p>
+                            This system leverages MediaPipe with Hailo NPU acceleration to detect hand landmarks in real-time.
+                            MediaPipe provides efficient on-device machine learning solutions for complex tasks.
+                        </p>
+                        <p>
+                            <strong>Key Features:</strong>
+                            <ul>
+                                <li>Detects 21 hand landmarks per hand</li>
+                                <li>Optimized for Hailo-8 NPU hardware acceleration</li>
+                                <li>Low-latency performance suitable for interactive applications</li>
+                                <li>Enables gesture recognition, sign language translation, and more</li>
+                            </ul>
+                        </p>
+                    </div>
+                    
+                    <form method="POST" action="{{ url_for('start_hand_detection') }}">
+                        <input type="hidden" name="input_type" value="camera">
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-info btn-lg">
+                                <i class="bi bi-hand-index-thumb-fill"></i> Start Hand Detection
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
