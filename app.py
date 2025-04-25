@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, Response, flash
+from flask import Flask, render_template, request, redirect, url_for, Response, flash, session  
 from werkzeug.utils import secure_filename
 import os
 import socket
@@ -8,7 +8,8 @@ import subprocess
 import signal
 import threading
 import time
-
+from functools import wraps
+from flask import after_this_request
 # ───────────────────────────────────────────────
 # App Configuration
 # ───────────────────────────────────────────────
@@ -114,6 +115,17 @@ def run_pose_estimation(model_path, input_source):
         preexec_fn=os.setsid
     )
 
+def clear_flash(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        @after_this_request
+        def clear_flash_messages(response):
+            # This will run after the request is complete
+            if '_flashes' in session:
+                session.pop('_flashes')
+            return response
+        return f(*args, **kwargs)
+    return decorated_function
 
 # ───────────────────────────────────────────────
 # Routes
@@ -125,6 +137,7 @@ def index():
 
 
 @app.route('/object-detection', methods=['GET', 'POST'])
+@clear_flash
 def object_detection():
     global current_mode, stream_active
 
@@ -168,6 +181,7 @@ def object_detection():
 
 
 @app.route('/pose-estimation', methods=['GET', 'POST'])
+@clear_flash
 def pose_estimation():
     global current_mode, stream_active
 
@@ -204,6 +218,44 @@ def pose_estimation():
 
     return render_template("pose-estimation.html")
 
+def run_face_detection():
+    global current_process
+    home_dir = os.path.expanduser("~")
+    app_dir = os.path.join(home_dir, "Hailo-AI-Lab")
+
+    if not os.path.exists(app_dir):
+        raise FileNotFoundError(f"Directory not found: {app_dir}")
+
+    base_cmd = f"cd {app_dir} && source env/bin/activate && cd AI-LAB && "
+    detection_cmd = "python3 client_face_hand.py -d face"
+    full_cmd = base_cmd + detection_cmd
+
+    current_process = subprocess.Popen(
+        full_cmd,
+        shell=True,
+        executable='/bin/bash',
+        preexec_fn=os.setsid
+    )
+
+def run_hand_detection():
+    global current_process
+    home_dir = os.path.expanduser("~")
+    app_dir = os.path.join(home_dir, "Hailo-AI-Lab")
+
+    if not os.path.exists(app_dir):
+        raise FileNotFoundError(f"Directory not found: {app_dir}")
+
+    base_cmd = f"cd {app_dir} && source env/bin/activate && cd AI-LAB && "
+    detection_cmd = "python3 client_face_hand.py -d hand"
+    full_cmd = base_cmd + detection_cmd
+
+    current_process = subprocess.Popen(
+        full_cmd,
+        shell=True,
+        executable='/bin/bash',
+        preexec_fn=os.setsid
+    )
+
 '''
 @app.route('/stop')
 def stop():
@@ -230,6 +282,7 @@ def video_feed():
 @app.route('/stop_detection', methods=['POST'])
 def stop_detection():
     global current_process, stream_active, current_mode
+    session.pop('_flashes', None)
 
     stream_active = False
     if current_process:
@@ -237,11 +290,53 @@ def stop_detection():
         current_process = None
         flash("Detection stopped.", "info")
 
+    # Store the redirect target in session to handle the flash properly
     if current_mode == 'object':
-        return redirect(url_for('object_detection'))
+        session['redirect_target'] = 'object_detection'
     elif current_mode == 'pose':
-        return redirect(url_for('pose_estimation'))
-    return redirect(url_for('welcome'))
+        session['redirect_target'] = 'pose_estimation'
+    elif current_mode == 'face':
+        session['redirect_target'] = 'face_detection'
+    elif current_mode == 'hand':
+        session['redirect_target'] = 'hand_detection'
+    else:
+        session['redirect_target'] = 'welcome'
+        
+    return redirect(url_for(session['redirect_target']))
+
+@app.route('/face-detection', methods=['GET', 'POST'])
+def face_detection():
+    global current_mode
+    current_mode = 'face'
+    return render_template('face_detection.html')
+
+@app.route('/start_face_detection', methods=['POST'])
+@clear_flash
+def start_face_detection():
+    global stream_active
+    
+    # Always use camera - simplified version
+    run_face_detection()
+    stream_active = True
+    flash("Hand detection started!", "success") 
+    return redirect(url_for('stream'))
+
+@app.route('/hand-detection', methods=['GET', 'POST'])
+@clear_flash
+def hand_detection():
+    global current_mode
+    current_mode = 'hand'
+    return render_template('hand_detection.html')
+
+@app.route('/start_hand_detection', methods=['POST'])
+def start_hand_detection():
+    global stream_active
+    
+    # Always use camera - simplified version
+    run_hand_detection()
+    stream_active = True
+    flash("Face detection started!", "success")
+    return redirect(url_for('stream'))
 
 
 # ───────────────────────────────────────────────
@@ -250,3 +345,4 @@ def stop_detection():
 if __name__ == '__main__':
     threading.Thread(target=receive_frames, daemon=True).start()
     app.run(host='0.0.0.0', port=5000, debug=True)
+
