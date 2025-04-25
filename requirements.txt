@@ -4,3 +4,5 @@ Pillow>=8.1.2
 opencv-python
 flask 
 werkzeug
+matplotlib
+plotly
